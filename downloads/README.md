@@ -1,13 +1,13 @@
-# Luma v2 downloads
+# Luma v2.1 downloads
 
-For the simplest setup, download **Luma-App.zip**, extract it, and double-click the HTML file inside. No development tools are required.
+Download **Luma-App.zip**, extract it, then double-click **Luma-Lighting-Calculator.html**. No installation or development tools are required.
 
-Open `Luma-Lighting-Calculator.html` in Chrome or Edge. The calculator is bundled into one HTML file.
-Extract `Luma-Source-Code.zip` for the full source, README and tests.
+Version 2.1 adds explicit primary, secondary and decorative lighting sources, per-source results, larger typography and improved contrast.
+
+The source project, documentation and automated tests are in Luma-Source-Code.zip.
 
 ## SHA-256 checksums
 
-- `Luma-Lighting-Calculator.html`: `f5b4c9af3e6cb615e264897c11213e4d0676c8387e2203ebb1848a158f921ffb`
-- `Luma-Source-Code.zip`: `4dd328a4cb2f9a3188839de1018e0448000e8baa2161fb186660b089bb369a1b`
-
-- `Luma-App.zip`: `9a97e3e779c38e3dbb7cbd0b3a5bd4d7c788e41fec4787188cd18987f09d1234`
+- `Luma-Lighting-Calculator.html`: `c66f7a7835e0894dd70b4c3e4d298b3878f42bd69db6b56a4d039d779a8c6847`
+- `Luma-App.zip`: `9bf2abae21a84ccd875e4d407f883e483e777c278f50ab3d61c055ed7537de95`
+- `Luma-Source-Code.zip`: `31fba0f5b60652027eb73c185c1d5c4e8ec4ce357bac18bbfcfef221db5395c6`
