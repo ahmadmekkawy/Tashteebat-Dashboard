@@ -1,0 +1,18 @@
+import { Inputs, calculate } from "./engine";
+import { guidance } from "./recommendation";
+import { disclaimer } from "./data/catalog";
+export function reportText(i: Inputs) {
+  const r = calculate(i),
+    g = guidance(i);
+  return `LUMA / PRELIMINARY LIGHTING STUDY\n${i.name} · ${i.room} · ${i.outdoor ? "Outdoor" : "Indoor"}\n${new Date().toLocaleDateString()}\n\nROOM\nDimensions: ${i.length.toFixed(2)} × ${i.width.toFixed(2)} × ${i.height.toFixed(2)} m\nArea: ${r.area.toFixed(1)} m² | Working plane: ${i.plane.toFixed(2)} m\nMounting height: ${i.mount.toFixed(2)} m | Room index: ${r.roomIndex.toFixed(2)}\nReflectances ceiling/wall/floor: ${i.ceiling}/${i.wall}/${i.floor}%\n\nDESIGN\nSuggested range: ${g.range} lux; room default ${g.default} lux (design band, not a normative range)\nSelected maintained average target: ${r.target.toFixed(0)} lux\nDelivered lumens E×A: ${r.delivered.toFixed(0)} lm\nRequired initial luminaire lumens without supplemental credit: ${r.lumens.toFixed(0)} lm\nPrimary fixture: ${i.type} | Input: ${i.lumens} lm (${i.sourceOutput ? "bare source" : "luminaire"})\nLuminaire output after optical correction: ${r.luminaireLumens.toFixed(0)} lm\nEffective maintained lumens/primary fixture: ${r.effective.toFixed(0)} lm\nUF ${i.uf}; MF ${i.mf}; optical efficiency ${i.sourceOutput ? i.opticalEfficiency : "not applied to luminaire output"}\nSuggested primary quantity: ${r.count}; planned primary quantity: ${r.installed}\nTotal units across all layers: ${r.totalUnits}\nEstimated achieved maintained average: ${r.achieved.toFixed(0)} lux\nCCT selected: ${i.kelvin} K; recommended ${g.cct}\nCRI ${i.cri}; beam ${i.beam}°; ${i.dimmable ? "dimmable" : "not dimmable"}; ${i.ip}; ${i.rating}\n\nLAYERS\nPrimary ambient: ${r.installed} × ${i.watts} W\n${i.mixed ? i.layers.map((l) => `${l.role}: ${l.type}, ${l.quantity} × ${l.lumens} lm, ${l.watts} W/unit; ${l.contributes ? `credited using UF ${l.uf}, MF ${l.mf}` : "not credited to whole-room lux"}`).join("\n") : "No supplemental groups enabled."}\n\nENERGY\nConnected load: ${r.power.toFixed(1)} W; ${r.powerDensity.toFixed(1)} W/m²\nPrimary luminaire efficacy: ${r.efficacy.toFixed(0)} lm/W\nEstimated annual energy: ${r.kwh.toFixed(0)} kWh\nInputs: ${i.hours} h/day × ${i.days} days/year × ${i.dimmable ? i.dimming : 1} average input-power fraction\nTariff: ${i.tariff} local currency/kWh; estimated annual cost: ${r.cost.toFixed(2)} local currency\n\nLAYOUT / STRATEGY\nPrimary grid: ${r.cols} × ${r.rows}; actual nominal cell ${r.spacingX.toFixed(1)} × ${r.spacingY.toFixed(1)} m\nWall offsets ${r.wallX.toFixed(1)} / ${r.wallY.toFixed(1)} m; beam overlap setting ${Math.round(i.overlap * 100)}%\n${/linear|track|cove/i.test(i.type) ? g.run : g.spacing}\n${g.strategy}\n${g.scene}\n${g.daylight}\n${g.glare}\n\nMETHOD\nN = ceil(max(0, E×A − credited supplemental maintained lumens) / (luminaire lm × UF × MF)).\nOnly verified same-plane supplemental light should receive credit. Quantity 0 selects automatic sizing. Daylight is not subtracted. UF and MF are assumptions requiring project verification. Layout is geometric, not photometric.\n\nREFERENCES\nEN 12464-1:2021 (indoor workplace task context); IES Lighting Library; CIE 97:2005 (maintenance); IEC 60529 (IP protection). Design bands, CCT and outdoor values are advisory rather than quoted regulatory limits.\n\n${disclaimer}\n`;
+}
+export function downloadText(text: string, name: string, type = "text/plain") {
+  const url = URL.createObjectURL(new Blob([text], { type }));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = name;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
