@@ -27,7 +27,7 @@ archive = outputs[0] / 'Luma-Source-Code.zip'
 with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED) as z:
     for file in root.rglob('*'):
         relative = file.relative_to(root)
-        if file.is_file() and not any(p in ['node_modules', '.git', 'dist', 'downloads'] for p in relative.parts) and not file.name.endswith('.tsbuildinfo'):
+        if file.is_file() and not any(p in ['node_modules', '.git', 'dist', 'site', 'downloads', '__pycache__'] for p in relative.parts) and not file.name.endswith('.tsbuildinfo'):
             z.write(file, Path('luma') / relative)
 for out in outputs[1:]:
     (out / archive.name).write_bytes(archive.read_bytes())
